@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Pembayaran</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c, #1a1a1a);
+            color: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b00, #ffa500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .payment-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .payment-card {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b00, #ffa500);
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+        }
+
+        .payment-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .payment-details {
+            margin-top: 15px;
+        }
+
+        .payment-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-label {
+            color: #aaa;
+            font-weight: 500;
+        }
+
+        .payment-value {
+            font-weight: 600;
+            color: #ffa500;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: linear-gradient(90deg, #ff6b00, #ffa500);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(90deg, #ff8c00, #ffb732);
+            box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+        }
+
+        .instructions {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instructions h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ffa500;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .payment-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 30, 30, 0.9);
+            color: #ffa500;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-left: 4px solid #ffa500;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pembayaran Online</h1>
+            <p class="subtitle">Pilih metode pembayaran yang tersedia</p>
+        </header>
+
+        <div class="payment-container">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <div class="payment-icon">D</div>
+                    <h2 class="payment-title">DANA</h2>
+                </div>
+                <div class="payment-details">
+                    <div class="payment-info">
+                        <span class="payment-label">Nomor Telepon:</span>
+                        <span class="payment-value">085137571376</span>
+                    </div>
+                    <div class="payment-info">
+                        <span class="payment-label">Nama:</span>
+                        <span class="payment-value">HIRRVONTRINITY</span>
+                    </div>
+                    <button class="copy-btn" data-copy="085137571376">Salin Nomor</button>
+                </div>
+            </div>
+
+            <div class="payment-card">
+                <div class="payment-header">
+                    <div class="payment-icon">G</div>
+                    <h2 class="payment-title">GOPAY</h2>
+                </div>
+                <div class="payment-details">
+                    <div class="payment-info">
+                        <span class="payment-label">Nomor Telepon:</span>
+                        <span class="payment-value">085137571376</span>
+                    </div>
+                    <div class="payment-info">
+                        <span class="payment-label">Nama:</span>
+                        <span class="payment-value">HIRRVONTRINITY</span>
+                    </div>
+                    <button class="copy-btn" data-copy="085137571376">Salin Nomor</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>Petunjuk Pembayaran</h2>
+            <ol>
+                <li>Pilih salah satu metode pembayaran di atas</li>
+                <li>Salin nomor telepon dengan menekan tombol "Salin Nomor"</li>
+                <li>Buka aplikasi DANA atau GoPay di ponsel Anda</li>
+                <li>Lakukan transfer ke nomor yang telah disalin</li>
+                <li>Pastikan nama penerima sesuai dengan yang tertera</li>
+                <li>Simpan bukti transfer untuk konfirmasi</li>
+            </ol>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Halaman Pembayaran. Semua hak dilindungi.</p>
+    </footer>
+
+    <div class="notification" id="notification">Teks berhasil disalin!</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            const notification = document.getElementById('notification');
+            
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const textToCopy = this.getAttribute('data-copy');
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        // Show notification
+                        notification.classList.add('show');
+                        
+                        // Hide notification after 3 seconds
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 3000);
+                    }).catch(err => {
+                        console.error('Gagal menyalin teks: ', err);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
